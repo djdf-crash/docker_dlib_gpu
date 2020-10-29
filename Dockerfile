@@ -92,4 +92,4 @@ RUN cmake --build /dlib/build
 
 RUN cd /dlib; python /dlib/setup.py install
 
-RUN pip install opencv-python==4.4.0.42 tensorflow==2.3.1
+RUN pip install opencv-python==4.4.0.42 tensorflow-gpu==2.3.1
