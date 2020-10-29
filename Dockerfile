@@ -92,4 +92,32 @@ RUN cmake --build /dlib/build
 
 RUN cd /dlib; python /dlib/setup.py install
 
-RUN pip install opencv-python==4.4.0.42 tensorflow-gpu==2.3.1
+
+# Install OpenCV-GPU
+
+# https://en.wikipedia.org/wiki/CUDA#GPUs_supported
+RUN apt-get update && apt-get install -y build-essential unzip pkg-config \
+libjpeg-dev libpng-dev libtiff-dev \
+libavcodec-dev libavformat-dev libswscale-dev \
+libv4l-dev libxvidcore-dev libx264-dev \
+libgtk-3-dev libatlas-base-dev gfortran \
+libgl1-mesa-glx cuda-cudart-10-1
+
+RUN wget -O opencv.zip https://github.com/opencv/opencv/archive/4.5.0.zip && unzip opencv.zip && mv opencv-4.5.0 opencv
+RUN wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.5.0.zip && unzip opencv_contrib.zip && mv opencv_contrib-4.5.0 opencv_contrib
+
+RUN cd /opencv; mkdir build && cd build && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+	-D CMAKE_INSTALL_PREFIX=/usr/local \
+	-D WITH_CUDA=ON \
+	-D WITH_CUDNN=ON \
+	-D OPENCV_DNN_CUDA=ON \
+	-D ENABLE_FAST_MATH=1 \
+	-D CUDA_FAST_MATH=1 \
+	-D CUDA_GENERATION=Auto \
+	-D WITH_CUBLAS=1 \
+	-D OPENCV_EXTRA_MODULES_PATH=/opencv_contrib/modules \
+	-D HAVE_opencv_python3=ON .. \
+	&& make -j "$(nproc)" && make install && ldconfig
+
+# pip instlal
+RUN pip install numpy==1.19.0 tensorflow==2.3.1
