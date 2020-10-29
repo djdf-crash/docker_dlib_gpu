@@ -91,3 +91,5 @@ RUN cmake -H/dlib -B/dlib/build -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1
 RUN cmake --build /dlib/build
 
 RUN cd /dlib; python /dlib/setup.py install
+
+RUN pip install opencv-python==4.4.0.42 tensorflow==2.3.1
