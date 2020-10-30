@@ -120,4 +120,4 @@ RUN cd /opencv; mkdir build && cd build && cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	&& make -j "$(nproc)" && make install && ldconfig
 
 # pip instlal
-RUN pip install numpy==1.18.5 tensorflow==2.3.1
+RUN pip install numpy==1.18.5
